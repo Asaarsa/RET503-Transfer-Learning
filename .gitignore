@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Model checkpoints
+*.pt
+*.pth
+*.onnx
+
+# Experiment outputs
+results/checkpoints/
+results/runs/
+
+# Raw/generated datasets
+# Keep metadata.csv tracked, but avoid accidentally committing very large datasets.
+dataset_raw/**/*.zip
+dataset/**/*.zip
