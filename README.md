@@ -23,14 +23,14 @@ RET503-Transfer-Learning/
 ├── dataset_raw/
 │   ├── metadata.csv
 │   ├── baut/
-│   └── mur/
+│   └── paku/
 ├── dataset/
 │   ├── train/
 │   │   ├── baut/
-│   │   └── mur/
+│   │   └── paku/
 │   └── val/
 │       ├── baut/
-│       └── mur/
+│       └── paku/
 ├── src/
 │   ├── capture.py
 │   ├── split.py
