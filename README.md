@@ -1,6 +1,14 @@
 # Klasifikasi Baut vs Paku Menggunakan Transfer Learning ResNet-18
 
-Proyek **RET503 Computer Vision and Deep Learning – Pertemuan 3** untuk klasifikasi citra dua kelas: **baut** dan **Paku**.
+Proyek **RET503 Computer Vision and Deep Learning – Pertemuan 3** untuk klasifikasi citra dua kelas: **baut** dan **paku**.
+
+## Status Dataset
+Dataset awal dikumpulkan menggunakan webcam dengan latar putih dari kertas:
+- baut: 15 citra
+- paku: 15 citra
+- total: 30 citra
+
+Dataset ini digunakan sebagai **uji awal pipeline**. Target eksperimen final tetap minimal **50 citra per kelas** dengan variasi jarak, posisi, orientasi, pencahayaan, latar, occlusion, tumpukan, dan motion blur.
 
 ## Eksperimen
 1. Feature Extraction
@@ -9,17 +17,9 @@ Proyek **RET503 Computer Vision and Deep Learning – Pertemuan 3** untuk klasif
 
 Model utama: **ResNet-18**.
 
-## Dataset
-Target awal: minimal **50 citra per kelas**. Foto dikumpulkan sendiri dengan variasi jarak, posisi, orientasi, pencahayaan, latar, occlusion, tumpukan, dan motion blur.
-
-Metadata dicatat di `dataset_raw/metadata.csv`.
-
 ## Struktur
-````
+```
 RET503-Transfer-Learning/
-├── README.md
-├── requirements.txt
-├── .gitignore
 ├── dataset_raw/
 │   ├── metadata.csv
 │   ├── baut/
@@ -37,13 +37,13 @@ RET503-Transfer-Learning/
 │   ├── train.py
 │   └── latency.py
 ├── models/
-│   ├── feature_extraction/
-│   ├── partial_finetuning/
+│   ├── feature/
+│   ├── partial/
 │   └── scratch/
 ├── results/
 └── docs/
     └── desain_pipeline_persepsi.md
-````
+```
 
 ## Konfigurasi Awal
 | Mode | Bobot awal | Parameter dilatih | Learning rate |
@@ -52,40 +52,39 @@ RET503-Transfer-Learning/
 | Partial Fine-Tuning | ImageNet | layer4 + FC | layer4 1e-4, FC 1e-3 |
 | Scratch | Acak | Semua layer | 1e-3 |
 
-10 epoch, augmentasi training, dan Cosine Annealing digunakan sebagai konfigurasi awal.
+Konfigurasi awal: 10 epoch, batch size 16, input 224×224, augmentasi training, dan Cosine Annealing.
 
 ## Menjalankan
-1. Install dependency:
-`bash
-python3 -m venv .venv
+Aktifkan virtual environment:
+```bash
 source .venv/bin/activate
-pip install -r requirements.txt
-`
-2. Masukkan foto ke `dataset_raw/baut/` dan `dataset_raw/mur/`.
-3. Lengkapi `dataset_raw/metadata.csv`.
-4. Split:
-`bash
+```
+
+Split dataset:
+```bash
 python src/split.py
-`
-5. Training:
-`bash
+```
+
+Training:
+```bash
 python src/train.py --mode feature
 python src/train.py --mode partial
 python src/train.py --mode scratch
-`
-6. Latency:
-`bash
-python src/latency.py --model models/feature_extraction/best.pt
-`
+```
+
+Latency:
+```bash
+python src/latency.py --model models/feature/best.pt
+```
 
 ## Metrik
 - training accuracy
 - validation accuracy
 - best validation accuracy dan epoch terbaik
 - waktu training
-- latency inference dan FPS
+- inference latency dan FPS
 
 ## Pencegahan Data Leakage
-Jika tersedia, pembagian menggunakan `session_id` agar foto dari sesi pengambilan yang sama tidak tersebar secara sembarangan antara train dan validation.
+Jika tersedia, pembagian menggunakan `session_id` agar foto dari sesi pengambilan yang sama tidak tersebar sembarangan antara train dan validation.
 
-Kesimpulan akhir akan ditulis setelah eksperimen benar-benar dijalankan.
+Kesimpulan akhir ditulis setelah eksperimen dengan dataset final selesai.
