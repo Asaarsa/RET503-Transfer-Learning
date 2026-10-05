@@ -1,6 +1,6 @@
-# Klasifikasi Baut vs Mur Menggunakan Transfer Learning ResNet-18
+# Klasifikasi Baut vs Paku Menggunakan Transfer Learning ResNet-18
 
-Proyek **RET503 Computer Vision and Deep Learning – Pertemuan 3** untuk klasifikasi citra dua kelas: **baut** dan **mur**.
+Proyek **RET503 Computer Vision and Deep Learning – Pertemuan 3** untuk klasifikasi citra dua kelas: **baut** dan **Paku**.
 
 ## Eksperimen
 1. Feature Extraction
