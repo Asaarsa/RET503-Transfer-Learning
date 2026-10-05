@@ -1,20 +1,22 @@
-# Desain Pipeline Persepsi — Klasifikasi Baut vs Mur
+# Desain Pipeline Persepsi — Klasifikasi Baut vs Paku
 
 ## 1. Misi Proyek
-Sistem visi digunakan untuk mengenali apakah objek yang terlihat kamera termasuk **baut** atau **mur**. Hasil klasifikasi dapat menjadi komponen persepsi untuk sistem robot/otomasi yang membutuhkan identifikasi objek.
+Sistem visi digunakan untuk mengenali apakah objek yang terlihat kamera termasuk **baut** atau **paku**. Hasil klasifikasi dapat menjadi komponen persepsi untuk sistem robot/otomasi yang membutuhkan identifikasi objek.
 
 ## 2. Kelas Objek
 | Kelas | Deskripsi | Target awal |
 |---|---|---:|
 | baut | Komponen baut | ≥50 citra |
-| mur | Komponen mur | ≥50 citra |
+| paku | Komponen paku | ≥50 citra |
 
-## 3. Rencana Pengambilan Data
+## 3. Kondisi Dataset Awal
+Sebagai uji awal pipeline, masing-masing kelas memiliki 15 citra yang diambil menggunakan webcam dengan objek di atas kertas putih. Dataset awal ini berjumlah 30 citra dan belum memenuhi target final ≥50 citra per kelas.
+
+## 4. Rencana Pengambilan Data
 - jarak dekat, sedang, dan jauh
 - objek di tengah dan tepi frame
 - orientasi tegak, miring, dan terbalik
 - cahaya terang dan redup
-- jendela/bayangan
 - latar berbeda dan objek pengganggu
 - sebagian objek tertutup
 - tumpukan
@@ -22,10 +24,10 @@ Sistem visi digunakan untuk mengenali apakah objek yang terlihat kamera termasuk
 
 Setiap foto dicatat di `dataset_raw/metadata.csv`.
 
-## 4. Pencegahan Data Leakage
+## 5. Pencegahan Data Leakage
 Foto dari sesi pengambilan yang sama sebaiknya dikelompokkan melalui `session_id`. Script split akan mencoba menggunakan kelompok sesi terlebih dahulu. Jika metadata sesi belum tersedia, digunakan random split sederhana berdasarkan kelas.
 
-## 5. Model ResNet-18
+## 6. Model ResNet-18
 ### Feature Extraction
 - pretrained ImageNet
 - backbone dibekukan
@@ -42,14 +44,14 @@ Foto dari sesi pengambilan yang sama sebaiknya dikelompokkan melalui `session_id
 - semua layer dilatih
 - learning rate = 1e-3
 
-## 6. Training
+## 7. Training
 - epoch: 10
 - batch size: 16
 - input: 224 × 224
 - augmentasi: horizontal flip, rotation, brightness/contrast
 - scheduler: Cosine Annealing
 
-## 7. Metrik
+## 8. Metrik
 - training accuracy
 - validation accuracy
 - best validation accuracy
@@ -58,12 +60,12 @@ Foto dari sesi pengambilan yang sama sebaiknya dikelompokkan melalui `session_id
 - inference latency
 - FPS
 
-## 8. Risiko dan Mitigasi
+## 9. Risiko dan Mitigasi
 | Risiko | Dampak | Mitigasi |
 |---|---|---|
 | Data leakage | Validation terlalu optimistis | Split berdasarkan sesi |
-| Dataset terlalu sedikit | Overfitting | Augmentasi dan transfer learning |
+| Dataset terlalu sedikit | Overfitting | Tambah data dan transfer learning |
+| Background terlalu seragam | Model belajar background | Tambahkan variasi latar |
 | Kondisi cahaya berubah | Akurasi dapat turun | Tambahkan variasi cahaya |
-| Background terlalu seragam | Model belajar background | Variasikan latar |
 | Occlusion/tumpukan | Klasifikasi lebih sulit | Tambahkan contoh occlusion |
 | Motion blur | Fitur kurang jelas | Tambahkan contoh blur |
